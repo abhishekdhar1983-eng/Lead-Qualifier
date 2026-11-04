@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+  <apiVersion>61.0</apiVersion>
+  <label>Hot Lead Follow-Up</label>
+  <processType>AutoLaunchedFlow</processType>
+  <status>Active</status>
+  <start>
+    <locationX>50</locationX><locationY>0</locationY>
+    <connector><targetReference>Create_Followup_Task</targetReference></connector>
+    <filterLogic>and</filterLogic>
+    <filters><field>Score_Tier__c</field><operator>EqualTo</operator><value><stringValue>Hot</stringValue></value></filters>
+    <filters><field>Score_Tier__c</field><operator>IsChanged</operator><value><booleanValue>true</booleanValue></value></filters>
+    <object>Lead</object>
+    <recordTriggerType>CreateAndUpdate</recordTriggerType>
+    <triggerType>RecordAfterSave</triggerType>
+  </start>
+  <recordCreates>
+    <name>Create_Followup_Task</name><label>Create Follow-up Task</label>
+    <locationX>50</locationX><locationY>200</locationY>
+    <inputAssignments><field>Subject</field><value><stringValue>HOT LEAD: Call within 1 hour</stringValue></value></inputAssignments>
+    <inputAssignments><field>Priority</field><value><stringValue>High</stringValue></value></inputAssignments>
+    <inputAssignments><field>WhoId</field><value><elementReference>$Record.Id</elementReference></value></inputAssignments>
+    <inputAssignments><field>OwnerId</field><value><elementReference>$Record.OwnerId</elementReference></value></inputAssignments>
+    <inputAssignments><field>ActivityDate</field><value><elementReference>$Flow.CurrentDate</elementReference></value></inputAssignments>
+    <object>Task</object>
+  </recordCreates>
+</Flow>
